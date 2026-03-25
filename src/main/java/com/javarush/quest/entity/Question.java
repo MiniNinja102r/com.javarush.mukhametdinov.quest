@@ -1,8 +1,22 @@
 package com.javarush.quest.entity;
 
-public final class Question extends BaseEntity {
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 
-    public Question(long id) {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
+@ToString
+public final class Question extends BaseEntity {
+    final String text;
+    final Answer[] answers;
+    final EndingType endingType;
+
+    public Question(long id, String text, Answer[] answers, EndingType endingType) {
         super(id);
+        this.text = text;
+        this.answers = answers;
+        this.endingType = endingType;
     }
 }
