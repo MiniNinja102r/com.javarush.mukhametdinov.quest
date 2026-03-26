@@ -72,7 +72,7 @@
 
     <p><b>Представься, чтобы начать игру:</b></p>
 
-    <form action="quest-servlet" method="POST">
+    <form action="quest-page" method="POST">
         <input type="text" name="username" placeholder="Введи свой ник..." required>
         <br/>
         <button type="submit">Представиться</button>
