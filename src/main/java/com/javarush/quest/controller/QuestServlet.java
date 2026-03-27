@@ -2,7 +2,14 @@ package com.javarush.quest.controller;
 
 import java.io.*;
 
+import com.javarush.quest.config.Config;
+import com.javarush.quest.entity.Game;
 import com.javarush.quest.entity.GameType;
+import com.javarush.quest.repository.GameFactory;
+import com.javarush.quest.repository.GameRepository;
+import com.javarush.quest.repository.JsonGameRepository;
+import com.javarush.quest.service.GameService;
+import com.javarush.quest.service.JspGameService;
 import com.javarush.quest.util.Constants;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
@@ -10,27 +17,25 @@ import jakarta.servlet.annotation.*;
 
 @WebServlet(name = "questPage", value = "/quest-page")
 public final class QuestServlet extends HttpServlet {
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-
-        final PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<h1> BRRR </h1>");
-        out.println("</body></html>");
-    }
+    private GameService gameService = new JspGameService();
+    private GameRepository gameRepository = new JsonGameRepository();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final String username = request.getParameter("username");
-        GameType game;
+        GameType type;
         try {
             String raw = request.getParameter("game");
-            game = raw != null ? GameType.valueOf(raw.toUpperCase()) : Constants.DEFAULT_GAME_TYPE;
+            type = raw != null ? GameType.valueOf(raw.toUpperCase()) : Constants.DEFAULT_GAME_TYPE;
         } catch (Exception e) {
-            game = Constants.DEFAULT_GAME_TYPE;
+            type = Constants.DEFAULT_GAME_TYPE;
         }
+
+        Config.load();
+        final Game game = GameFactory.createGame(type);
+        gameService.launch(game);
+
+        gameRepository.read(type, 1);
 
         final HttpSession session = request.getSession();
         session.setAttribute("username", username);

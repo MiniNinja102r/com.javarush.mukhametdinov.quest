@@ -6,6 +6,8 @@ import com.javarush.quest.util.Constants;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 @UtilityClass
 public final class GameFactory {
 
@@ -16,6 +18,6 @@ public final class GameFactory {
 
     @NotNull
     public static Game createGame(@NotNull GameType type) {
-        return new Game(type);
+        return new Game(UUID.randomUUID(), type);
     }
 }
