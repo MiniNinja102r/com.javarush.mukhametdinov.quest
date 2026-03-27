@@ -1,11 +1,5 @@
-<%@ page import="com.javarush.quest.service.GameService" %>
-<%@ page import="com.javarush.quest.service.JspGameService" %>
-<%@ page import="com.javarush.quest.repository.GameFactory" %>
+<%@ page import="com.javarush.quest.util.Constants" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-
-<%
-    final GameService gameService = new JspGameService();
-%>
 
 <!DOCTYPE html>
 <html>
@@ -72,8 +66,11 @@
 
     <p><b>Представься, чтобы начать игру:</b></p>
 
-    <form action="quest-page" method="POST">
-        <input type="text" name="username" placeholder="Введи свой ник..." required>
+    <form action="${pageContext.request.contextPath}/quest-page" method="POST">
+        <label>
+            <input type="text" name="username" placeholder="Введи свой ник..." required>
+            <input type="hidden" name="game" value= <%= Constants.DEFAULT_GAME_TYPE.name() %>>
+        </label>
         <br/>
         <button type="submit">Представиться</button>
     </form>

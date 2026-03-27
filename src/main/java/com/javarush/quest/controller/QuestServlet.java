@@ -4,39 +4,42 @@ import java.io.*;
 
 import com.javarush.quest.entity.GameType;
 import com.javarush.quest.util.Constants;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.java.Log;
 
-@Log
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @WebServlet(name = "questPage", value = "/quest-page")
 public final class QuestServlet extends HttpServlet {
-    String username;
-    GameType game;
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        username = request.getParameter("username");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+
+        final PrintWriter out = response.getWriter();
+        out.println("<html><body>");
+        out.println("<h1> BRRR </h1>");
+        out.println("</body></html>");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        final String username = request.getParameter("username");
+        GameType game;
         try {
             String raw = request.getParameter("game");
-            if (raw != null) game = GameType.valueOf(raw.toUpperCase());
+            game = raw != null ? GameType.valueOf(raw.toUpperCase()) : Constants.DEFAULT_GAME_TYPE;
         } catch (Exception e) {
-            log.severe("Не удалось прочитать тип игры из запроса.");
             game = Constants.DEFAULT_GAME_TYPE;
         }
 
+        final HttpSession session = request.getSession();
+        session.setAttribute("username", username);
+        session.setAttribute("game", game);
 
         response.setContentType("text/html");
         response.setContentType("text/html;charset=UTF-8");
-
-        // Hello
-//        PrintWriter out = response.getWriter();
-//        out.println("<html><body>");
-//        out.println("<h1>" + message + "</h1>");
-//        out.println("</body></html>");
-
+        response.getWriter().println("OK");
+        response.getWriter().println(session.getAttribute("username"));
+        response.getWriter().println(session.getAttribute("game"));
     }
 }
