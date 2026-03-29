@@ -16,6 +16,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +25,10 @@ import org.jetbrains.annotations.NotNull;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @WebServlet(name = "questPage", value = "/quest-page")
 public final class QuestServlet extends HttpServlet {
-    GameService gameService = new JspGameService();
-    GameRepository gameRepository = new JsonGameRepository();
+    @Getter
+    final GameService gameService = new JspGameService();
+    @Getter
+    final GameRepository gameRepository = new JsonGameRepository();
 
     @Override
     public void init() {
