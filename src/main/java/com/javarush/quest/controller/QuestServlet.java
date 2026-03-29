@@ -17,6 +17,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.jetbrains.annotations.NotNull;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @WebServlet(name = "questPage", value = "/quest-page")
@@ -31,6 +32,7 @@ public final class QuestServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
         final HttpSession session = request.getSession();
 
         Game game;
@@ -44,7 +46,7 @@ public final class QuestServlet extends HttpServlet {
     }
 
     private Game startNewGame(HttpServletRequest request, HttpSession session) {
-        final String username = request.getParameter(Constants.USERNAME);
+        final String username = this.getUsername(request, session);
         session.setAttribute(Constants.USERNAME, username);
 
         Integer gamesCount = (Integer) session.getAttribute(Constants.GAMES_COUNT);
@@ -84,6 +86,16 @@ public final class QuestServlet extends HttpServlet {
             }
         }
         return game;
+    }
+
+    @NotNull
+    private String getUsername(HttpServletRequest request, HttpSession session) {
+        String username;
+        if (session.getAttribute(Constants.GAMES_COUNT) == null)
+            username = request.getParameter(Constants.USERNAME);
+        else
+            username = (String) session.getAttribute(Constants.USERNAME);
+        return username == null ? Constants.DEFAULT_USERNAME : username;
     }
 
     private void processFinish(Game game, Question current, HttpSession session) {
