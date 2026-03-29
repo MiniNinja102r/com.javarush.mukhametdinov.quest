@@ -69,7 +69,7 @@
     <form action="${pageContext.request.contextPath}/quest-page" method="POST">
         <label>
             <input type="text" name="username" placeholder="Введи свой ник..." required>
-            <input type="hidden" name="game" value= <%= Constants.DEFAULT_GAME_TYPE.name() %>>
+            <input type="hidden" name="gameType" value= <%= Constants.DEFAULT_GAME_TYPE.name() %>>
         </label>
         <br/>
         <button type="submit">Представиться</button>

@@ -22,7 +22,8 @@ public final class JspGameService implements GameService {
 
     @Override
     public void remove(UUID id) {
-        if (id != null) this.activeGames.remove(id);
+        if (id != null)
+            this.activeGames.remove(id);
     }
 
     @Override

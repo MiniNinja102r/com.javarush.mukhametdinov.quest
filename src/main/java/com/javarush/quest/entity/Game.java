@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode
 @ToString
@@ -16,4 +16,8 @@ public final class Game {
 
     @NotNull
     final GameType gameType;
+
+    @NotNull
+    @Setter
+    Question currentQuestion;
 }

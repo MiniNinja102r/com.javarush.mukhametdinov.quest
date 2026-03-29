@@ -17,7 +17,7 @@ import java.net.URL;
 public final class JsonGameRepository implements GameRepository {
 
     @Override
-    public Question read(@NotNull GameType type, int id) {
+    public Question read(@NotNull GameType type, long id) {
         try {
             final URL jsonURL = GameRepository.class.getResource(Config.resource.gamePath() + type.getJsonGameFile());
             if (jsonURL == null)
@@ -33,7 +33,7 @@ public final class JsonGameRepository implements GameRepository {
         }
     }
 
-    private Question readQuestionFromJson(@NotNull JSONObject json, int id) {
+    private Question readQuestionFromJson(@NotNull JSONObject json, long id) {
         final JSONArray questions = (JSONArray) json.get("questions");
         for (Object o : questions) {
             final JSONObject qJson = (JSONObject) o;

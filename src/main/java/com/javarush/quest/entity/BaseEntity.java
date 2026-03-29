@@ -1,9 +1,6 @@
 package com.javarush.quest.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -11,5 +8,6 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode
 @ToString
 public abstract class BaseEntity {
+    @Getter(value = AccessLevel.PUBLIC)
     final long id;
 }
