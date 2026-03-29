@@ -17,8 +17,10 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 
+@Log
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @WebServlet(name = "questPage", value = "/quest-page")
 public final class QuestServlet extends HttpServlet {
@@ -54,7 +56,7 @@ public final class QuestServlet extends HttpServlet {
 
         String raw = request.getParameter(Constants.GAME_TYPE);
         final GameType type = raw == null
-                ? Constants.DEFAULT_GAME_TYPE
+                ? Config.resource.defaultGameType()
                 : GameType.valueOf(raw.toUpperCase());
         final Question current = gameRepository.read(type, Constants.FIRST_QUESTION_ID);
 
@@ -95,18 +97,19 @@ public final class QuestServlet extends HttpServlet {
             username = request.getParameter(Constants.USERNAME);
         else
             username = (String) session.getAttribute(Constants.USERNAME);
-        return username == null ? Constants.DEFAULT_USERNAME : username;
+        return username == null ? Config.resource.defaultUsername() : username;
     }
 
     private void processFinish(Game game, Question current, HttpSession session) {
+        final String username = (String) session.getAttribute(Constants.USERNAME);
         try {
             if (current.getEndingType() == EndingType.BAD) {
-                System.out.println("LOOSE");
+                log.info("user: " + username + " lost a game.");
             } else {
-                System.out.println("WIN");
+                log.info("user: " + username + " win a game.");
             }
         } finally {
-            session.setAttribute(Constants.GAME_UUID, null);
+            session.removeAttribute(Constants.GAME_UUID);
             gameService.remove(game.getId());
         }
     }

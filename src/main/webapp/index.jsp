@@ -1,4 +1,3 @@
-<%@ page import="com.javarush.quest.util.Constants" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
@@ -22,9 +21,7 @@
             border-radius: 10px;
         }
 
-        h1 {
-            color: #ff4444;
-        }
+        h1 { color: #ff4444; }
 
         input[type="text"] {
             padding: 10px;
@@ -44,9 +41,7 @@
             cursor: pointer;
         }
 
-        button:hover {
-            background-color: #cc0000;
-        }
+        button:hover { background-color: #cc0000; }
     </style>
 </head>
 
@@ -58,7 +53,6 @@
         Ты очнулся в тёмном доме. Голова раскалывается, вокруг - тишина... слишком подозрительная.
         Последнее, что ты помнишь - странный человек, наблюдающий за тобой в переулке.
     </p>
-
     <p>
         Где-то в доме скрипнула дверь. Он здесь.
         И у тебя есть только один шанс выбраться отсюда.
@@ -67,10 +61,7 @@
     <p><b>Представься, чтобы начать игру:</b></p>
 
     <form action="${pageContext.request.contextPath}/quest-page" method="POST">
-        <label>
-            <input type="text" name="username" placeholder="Введи свой ник..." required>
-            <input type="hidden" name="gameType" value= <%= Constants.DEFAULT_GAME_TYPE.name() %>>
-        </label>
+        <input type="text" name="username" placeholder="Введи свой ник..." required>
         <br/>
         <button type="submit">Представиться</button>
     </form>

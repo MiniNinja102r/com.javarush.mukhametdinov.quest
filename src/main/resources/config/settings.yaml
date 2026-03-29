@@ -1,2 +1,4 @@
 resources:
   game_path: /game/
+  default_username: Гость
+  default_gametype: ESCAPE_FROM_MURDER

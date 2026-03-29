@@ -1,9 +1,9 @@
 package com.javarush.quest.repository;
 
+import com.javarush.quest.config.Config;
 import com.javarush.quest.entity.Game;
 import com.javarush.quest.entity.GameType;
 import com.javarush.quest.entity.Question;
-import com.javarush.quest.util.Constants;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public final class GameFactory {
 
     @NotNull
     public static Game createGame(@NotNull Question currentQuestion) {
-        return createGame(Constants.DEFAULT_GAME_TYPE, currentQuestion);
+        return createGame(Config.resource.defaultGameType(), currentQuestion);
     }
 
     @NotNull

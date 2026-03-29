@@ -1,5 +1,6 @@
 package com.javarush.quest.config;
 
+import com.javarush.quest.entity.GameType;
 import com.javarush.quest.exception.ConfigReadingException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.java.Log;
@@ -40,9 +41,13 @@ public final class Config {
             return;
         }
         String gamePath = (String) section.get("game_path");
-        resource = new Resource(gamePath);
+        String defUsername = (String) section.get("default_username");
+        GameType defGameType = GameType.valueOf((String) section.get("default_gametype"));
+        resource = new Resource(gamePath, defUsername, defGameType);
     }
 
-    public record Resource(String gamePath) {
+    public record Resource(String gamePath,
+                           String defaultUsername,
+                           GameType defaultGameType) {
     }
 }

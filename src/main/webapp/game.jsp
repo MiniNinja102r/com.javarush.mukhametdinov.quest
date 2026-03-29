@@ -24,7 +24,7 @@
             padding: 40px;
         }
 
-        .box {
+        .container {
             max-width: 600px;
             margin: auto;
             background: #1e1e1e;
@@ -42,34 +42,32 @@
             border-radius: 5px;
         }
 
-        button:hover {
-            background: #cc0000;
-        }
+        button:hover { background: #cc0000; }
         .good { color: #00ff88; }
         .bad { color: #ff4444; }
     </style>
 </head>
 
 <body>
-<div class="box">
+<div class="container">
     <h2><%= question.getText() %></h2>
-    <% if (question.getEndingType() == null) { %>
-    <form method="POST" action="quest-page">
-        <% for (Answer a : question.getAnswers()) { %>
-        <button type="submit" name="answer" value="<%= a.getId() %>">
-            <%= a.getText() %>
-        </button>
-        <br/>
-        <% } %>
-    </form>
 
+    <% if (question.getEndingType() == null) { %>
+        <form method="POST" action="quest-page">
+            <% for (Answer a : question.getAnswers()) { %>
+                <button type="submit" name="answer" value="<%= a.getId() %>">
+                    <%= a.getText() %>
+                </button>
+            <br/>
+            <% } %>
+        </form>
     <% } else { %>
-    <h3 class="<%= question.getEndingType() == EndingType.GOOD ? "good" : "bad" %>">
-        <%= question.getEndingType() == EndingType.GOOD ? "Победа! Ты выбрался!" : "Поражение. Маньяк тебя нашёл." %>
-    </h3>
-    <form method="POST" action="quest-page">
-        <button>Начать заново</button>
-    </form>
+        <h3 class="<%= question.getEndingType() == EndingType.GOOD ? "good" : "bad" %>">
+            <%= question.getEndingType() == EndingType.GOOD ? "Победа! Ты выбрался!" : "Поражение. Маньяк тебя нашёл." %>
+        </h3>
+        <form method="POST" action="quest-page">
+            <button>Начать заново</button>
+        </form>
     <% } %>
 
     <hr>
