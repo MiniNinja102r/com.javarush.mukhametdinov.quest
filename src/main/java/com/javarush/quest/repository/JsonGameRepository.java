@@ -1,10 +1,13 @@
 package com.javarush.quest.repository;
 
 import com.javarush.quest.config.Config;
+import com.javarush.quest.entity.Answer;
+import com.javarush.quest.entity.EndingType;
 import com.javarush.quest.entity.GameType;
 import com.javarush.quest.entity.Question;
 import com.javarush.quest.exception.JsonReadingException;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -24,14 +27,39 @@ public final class JsonGameRepository implements GameRepository {
 
             Object parsed = jsonParser.parse(new FileReader(jsonURL.getPath()));
             JSONObject json = (JSONObject) parsed;
-
-            String name = (String) json.get("Name");
-            String at = (String) json.get("Posted at");
-
-            System.out.println(name + " : " + at);
+            return this.readQuestionFromJson(json, id);
         } catch (Exception e) {
             throw new JsonReadingException(e.getMessage());
         }
-        return null;
+    }
+
+    private Question readQuestionFromJson(@NotNull JSONObject json, int id) {
+        final JSONArray questions = (JSONArray) json.get("questions");
+        for (Object o : questions) {
+            final JSONObject qJson = (JSONObject) o;
+
+            long qId = (Long) qJson.get("id");
+            if (qId == id) {
+                String text = (String) qJson.get("text");
+
+                EndingType ending = null;
+                if (qJson.containsKey("endingType"))
+                    ending = EndingType.valueOf(((String) qJson.get("endingType")).toUpperCase());
+
+                final JSONArray answersJson = (JSONArray) qJson.get("answers");
+
+                Answer[] answers = new Answer[answersJson.size()];
+                for (int i = 0; i < answersJson.size(); i++) {
+                    final JSONObject aJson = (JSONObject) answersJson.get(i);
+                    long aId = (Long) aJson.get("id");
+                    String aText = (String) aJson.get("text");
+                    long next = (Long) aJson.get("next");
+
+                    answers[i] = new Answer(aId, aText, next);
+                }
+                return new Question(qId, text, answers, ending);
+            }
+        }
+        throw new JsonReadingException("Question not found with id: " + id);
     }
 }
