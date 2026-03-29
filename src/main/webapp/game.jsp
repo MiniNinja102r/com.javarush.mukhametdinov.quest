@@ -30,9 +30,7 @@
 </form>
 <% } else { %>
 <h3>
-    <%= question.getEndingType() == EndingType.GOOD
-            ? "Ты выжил"
-            : "Тебя нашли" %>
+    <%= question.getEndingType() == EndingType.GOOD ? "Ты выжил" : "Тебя нашли" %>
 </h3>
 <form action="index.jsp">
     <button type="submit">Начать заново</button>

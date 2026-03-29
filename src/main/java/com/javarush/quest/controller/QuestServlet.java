@@ -4,10 +4,7 @@ import java.io.*;
 import java.util.UUID;
 
 import com.javarush.quest.config.Config;
-import com.javarush.quest.entity.Answer;
-import com.javarush.quest.entity.Game;
-import com.javarush.quest.entity.GameType;
-import com.javarush.quest.entity.Question;
+import com.javarush.quest.entity.*;
 import com.javarush.quest.exception.GameNotFoundException;
 import com.javarush.quest.repository.GameFactory;
 import com.javarush.quest.repository.GameRepository;
@@ -18,11 +15,14 @@ import com.javarush.quest.util.Constants;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @WebServlet(name = "questPage", value = "/quest-page")
 public final class QuestServlet extends HttpServlet {
-    private GameService gameService = new JspGameService();
-    private GameRepository gameRepository = new JsonGameRepository();
+    GameService gameService = new JspGameService();
+    GameRepository gameRepository = new JsonGameRepository();
 
     @Override
     public void init() {
@@ -76,11 +76,26 @@ public final class QuestServlet extends HttpServlet {
             if (String.valueOf(a.getId()).equals(answerId)) {
                 long nextId = a.getNextQuestionId();
                 current = gameRepository.read(game.getGameType(), nextId);
+                if (current.getEndingType() != null)
+                    this.processFinish(game, current, session);
 
                 game.setCurrentQuestion(current);
                 break;
             }
         }
         return game;
+    }
+
+    private void processFinish(Game game, Question current, HttpSession session) {
+        try {
+            if (current.getEndingType() == EndingType.BAD) {
+                System.out.println("LOOSE");
+            } else {
+                System.out.println("WIN");
+            }
+        } finally {
+            session.setAttribute(Constants.GAME_UUID, null);
+            gameService.remove(game.getId());
+        }
     }
 }
