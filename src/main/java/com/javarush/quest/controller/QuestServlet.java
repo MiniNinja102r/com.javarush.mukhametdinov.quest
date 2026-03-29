@@ -77,7 +77,7 @@ public final class QuestServlet extends HttpServlet {
 
         final long currentId = game.getCurrentQuestion().getId();
         Question current = gameRepository.read(game.getGameType(), currentId);
-        String answerId = request.getParameter("answer");
+        String answerId = request.getParameter(Constants.ANSWER);
 
         for (Answer a : current.getAnswers()) {
             if (String.valueOf(a.getId()).equals(answerId)) {

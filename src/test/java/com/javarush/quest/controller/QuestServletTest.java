@@ -68,7 +68,7 @@ class QuestServletTest {
 
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(Constants.GAME_UUID)).thenReturn(gameId);
-        when(request.getParameter("answer")).thenReturn("10");
+        when(request.getParameter(Constants.ANSWER)).thenReturn("10");
         when(request.getRequestDispatcher("/game.jsp")).thenReturn(dispatcher);
 
         servlet.doPost(request, response);
