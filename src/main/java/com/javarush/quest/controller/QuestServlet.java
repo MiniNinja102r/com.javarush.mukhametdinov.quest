@@ -3,6 +3,7 @@ package com.javarush.quest.controller;
 import java.io.*;
 import java.util.UUID;
 
+import com.javarush.quest.config.Config;
 import com.javarush.quest.entity.Answer;
 import com.javarush.quest.entity.Game;
 import com.javarush.quest.entity.GameType;
@@ -24,6 +25,11 @@ public final class QuestServlet extends HttpServlet {
     private GameRepository gameRepository = new JsonGameRepository();
 
     @Override
+    public void init() {
+        Config.load();
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final HttpSession session = request.getSession();
 
@@ -33,13 +39,16 @@ public final class QuestServlet extends HttpServlet {
         else
             game = this.processResponse(request, session);
 
-        request.setAttribute("question", game.getCurrentQuestion());
+        request.setAttribute(Constants.QUESTION, game.getCurrentQuestion());
         request.getRequestDispatcher("/game.jsp").forward(request, response);
     }
 
     private Game startNewGame(HttpServletRequest request, HttpSession session) {
         final String username = request.getParameter(Constants.USERNAME);
         session.setAttribute(Constants.USERNAME, username);
+
+        Integer gamesCount = (Integer) session.getAttribute(Constants.GAMES_COUNT);
+        session.setAttribute(Constants.GAMES_COUNT, gamesCount == null ? 1 : gamesCount + 1);
 
         String raw = request.getParameter(Constants.GAME_TYPE);
         final GameType type = raw == null
